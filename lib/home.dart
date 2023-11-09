@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:snakegame/blank_pixel.dart';
 import 'package:snakegame/snake_pixel.dart';
@@ -21,6 +23,20 @@ List<int> snakePos = [
 ];
 // food position
 int foodPos = 55;
+//start the game
+void startGame(){
+  Timer.periodic(Duration(milliseconds: 200), (timer){
+    setState(() {
+      //add new head
+      snakePos.add(snakePos.last+1);
+      //remove tail
+      snakePos.removeAt(0);
+      });
+
+  });
+  
+}
+
   @override 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,25 +55,34 @@ int foodPos = 55;
            Flexible(
             fit: FlexFit.tight,
             flex: 3,
-      child: GridView.builder(
-        itemCount: totalNumberOfSquares,
-        physics: const  NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: rowSize ), 
-      itemBuilder: (context, index){
-        if (snakePos.contains(index)){
-          return const SnakePixel();
-               }
-               else if (foodPos==index)
-               {
-                return const FoodPixel();
-               }
+      child: GestureDetector(
+        onVerticalDragUpdate:(details){
+          if(details.delta.dy>0){
+            print('Move up');
 
-               else
-               {
-                return const BlankPixel();
-               }
-      }),
+          }
+
+        },
+        child: GridView.builder(
+          itemCount: totalNumberOfSquares,
+          physics: const  NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: rowSize ), 
+        itemBuilder: (context, index){
+          if (snakePos.contains(index)){
+            return const SnakePixel();
+                 }
+                 else if (foodPos==index)
+                 {
+                  return const FoodPixel();
+                 }
+      
+                 else
+                 {
+                  return const BlankPixel();
+                 }
+        }),
+      ),
         ),
                 
           
@@ -68,6 +93,14 @@ int foodPos = 55;
 
       fit: FlexFit.tight,
       child: Container(
+        child: Center(
+          child: MaterialButton(
+            child: Text('PLAY'),
+            color: Colors.pink,
+            onPressed: startGame ,
+
+            )
+            )
             
 ),
           ),
