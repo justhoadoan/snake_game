@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 
 class SnakePixel extends StatelessWidget {
-  const SnakePixel({super.key});
+  const SnakePixel ({Key? key}) : super (key: key);
 
   @override
   Widget build(BuildContext context) {

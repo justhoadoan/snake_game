@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:snakegame/blank_pixel.dart';
+import 'package:snakegame/snake_pixel.dart';
  
  
  class HomePage extends StatefulWidget {
@@ -18,6 +19,8 @@ List<int> snakePos = [
 1,
 2,
 ];
+// food position
+int foodPos = 55;
   @override 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +45,13 @@ List<int> snakePos = [
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: rowSize ), 
       itemBuilder: (context, index){
-        return const BlankPixel();
+        if (snakePos.contains(index)){
+          return const SnakePixel();
+               }
+               else
+               {
+                return const BlankPixel();
+               }
       }),
         ),
                 
