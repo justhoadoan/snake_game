@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:snakegame/blank_pixel.dart';
 import 'package:snakegame/snake_pixel.dart';
- 
+import 'package:snakegame/food_pixel.dart';
  
  class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super (key : key );
-  
+
   @override
   State<HomePage> createState() => _HomePageState();
  }
@@ -48,6 +48,11 @@ int foodPos = 55;
         if (snakePos.contains(index)){
           return const SnakePixel();
                }
+               else if (foodPos==index)
+               {
+                return const FoodPixel();
+               }
+
                else
                {
                 return const BlankPixel();
