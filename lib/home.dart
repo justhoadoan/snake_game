@@ -20,6 +20,10 @@ import 'package:snakegame/food_pixel.dart';
 //grid dimensions
 int rowSize = 10;
 int totalNumberOfSquares = 100;
+
+bool gameHasStarted = false;
+//user score
+int currentScore = 0;
 // snake postition
 List<int> snakePos = [
 0,
@@ -32,6 +36,7 @@ var currentDirection= snake_Direction.RIGHT;
 int foodPos = 55;
 //start the game
 void startGame(){
+  gameHasStarted = true;
   Timer.periodic(Duration(milliseconds: 200), (timer){
     setState(() {
       moveSnake();
@@ -39,9 +44,30 @@ void startGame(){
        timer.cancel();
         showDialog(
           context: context, 
+          barrierDismissible: false,
           builder: (builder){
             return AlertDialog(
              title: Text('Game over'),
+             content: Column(
+               children: [
+                 Text('Your score is '+ currentScore.toString()),
+                 TextField(
+                  decoration: InputDecoration(hintText: 'Enter name'),
+                 ),
+               ],
+             ),
+             actions: [
+              MaterialButton(
+                onPressed: ()  {
+                  Navigator.pop(context);
+                  sumbitScore();
+                  
+                  newGame();
+                }, 
+                child: Text('Sumbit'),
+                color: Colors.pink,
+              )
+             ],
              );
             
          });
@@ -52,7 +78,25 @@ void startGame(){
   });
   
 }
+void sumbitScore(){
+
+//initState();
+}
+void newGame(){
+  setState(() {
+     snakePos = [
+0,
+1,
+2,
+];
+foodPos = 55;
+currentDirection = snake_Direction.RIGHT;
+gameHasStarted = false;
+currentScore = 0;
+  });
+}
 void eatFood(){
+  currentScore ++;
 while (snakePos.contains(foodPos)){
   foodPos = Random().nextInt(totalNumberOfSquares);
 }
@@ -139,11 +183,27 @@ bool gameOver(){
         children: [
           //scores
           Flexible(
-
-      fit: FlexFit.tight,
-      child: Container(
+fit: FlexFit.tight,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children:[
+          //user current score
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Current Score'),
+              Text(
+                currentScore.toString(),
+                style: TextStyle(fontSize: 36),
+                ),
+            ],
+          ),
+          //high score
+          Text('Highscores..')
+        ],
+      ),
             
-),
+
           ),
           //game grid
            Flexible(
@@ -203,8 +263,8 @@ bool gameOver(){
         child: Center(
           child: MaterialButton(
             child: Text('PLAY'),
-            color: Colors.pink,
-            onPressed: startGame ,
+            color: gameHasStarted ? Colors.grey:  Colors.pink,
+            onPressed: gameHasStarted ? (){} : startGame ,
 
             )
             )
