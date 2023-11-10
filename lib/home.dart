@@ -40,8 +40,13 @@ void startGame(){
 void moveSnake(){
     switch (currentDirection) {
       case snake_Direction.RIGHT:{
-        //add a head
-        snakePos.add(snakePos.last+1);
+        //if snake is at the right wall, need to re adjust
+        if(snakePos.last%rowSize==9){
+          snakePos.add(snakePos.last+1-rowSize);
+          } else {
+            snakePos.add(snakePos.last+1);
+          }
+        
 
         //remove tail
         snakePos.removeAt(0);
@@ -50,7 +55,11 @@ void moveSnake(){
         break;
         case snake_Direction.LEFT:{
             //add a head
-        snakePos.add(snakePos.last-1);
+        if(snakePos.last%rowSize==0){
+          snakePos.add(snakePos.last-1+rowSize);
+          } else {
+            snakePos.add(snakePos.last-1);
+          }
 
         //remove tail
         snakePos.removeAt(0);
@@ -59,7 +68,13 @@ void moveSnake(){
         break;
         case snake_Direction.UP:{
             //add a head
-        snakePos.add(snakePos.last - rowSize);
+        if(snakePos.last<rowSize){
+          snakePos.add(snakePos.last-rowSize+totalNumberOfSquares);
+
+        }
+        else {
+          snakePos.add(snakePos.last - rowSize);
+        }
 
         //remove tail
         snakePos.removeAt(0);
@@ -68,7 +83,13 @@ void moveSnake(){
         break;
         case snake_Direction.DOWN:{
             //add a head
-        snakePos.add(snakePos.last+rowSize);
+       if(snakePos.last + rowSize>totalNumberOfSquares){
+          snakePos.add(snakePos.last+rowSize-totalNumberOfSquares);
+
+        }
+        else {
+          snakePos.add(snakePos.last +rowSize);
+        }
 
         //remove tail
         snakePos.removeAt(0);
