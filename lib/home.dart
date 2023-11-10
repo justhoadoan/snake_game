@@ -1,4 +1,7 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:snakegame/blank_pixel.dart';
@@ -11,6 +14,7 @@ import 'package:snakegame/food_pixel.dart';
   @override
   State<HomePage> createState() => _HomePageState();
  }
+ // ignore: camel_case_types
  enum snake_Direction {UP, DOWN, LEFT, RIGHT}
  class _HomePageState extends State<HomePage>{
 //grid dimensions
@@ -31,16 +35,32 @@ void startGame(){
   Timer.periodic(Duration(milliseconds: 200), (timer){
     setState(() {
       moveSnake();
+     if(gameOver()){
+       timer.cancel();
+        showDialog(
+          context: context, 
+          builder: (builder){
+            return AlertDialog(
+             title: Text('Game over'),
+             );
+            
+         });
+     }
     
       });
 
   });
   
 }
+void eatFood(){
+while (snakePos.contains(foodPos)){
+  foodPos = Random().nextInt(totalNumberOfSquares);
+}
+}
 void moveSnake(){
     switch (currentDirection) {
       case snake_Direction.RIGHT:{
-        //if snake is at the right wall, need to re adjust
+        //if snake is at the right wall, need to re-adjust
         if(snakePos.last%rowSize==9){
           snakePos.add(snakePos.last+1-rowSize);
           } else {
@@ -48,8 +68,7 @@ void moveSnake(){
           }
         
 
-        //remove tail
-        snakePos.removeAt(0);
+        
       }
         
         break;
@@ -61,8 +80,7 @@ void moveSnake(){
             snakePos.add(snakePos.last-1);
           }
 
-        //remove tail
-        snakePos.removeAt(0);
+       
         }
         
         break;
@@ -76,8 +94,7 @@ void moveSnake(){
           snakePos.add(snakePos.last - rowSize);
         }
 
-        //remove tail
-        snakePos.removeAt(0);
+       
         }
         
         break;
@@ -91,13 +108,27 @@ void moveSnake(){
           snakePos.add(snakePos.last +rowSize);
         }
 
-        //remove tail
-        snakePos.removeAt(0);
+      
         }
         
         break;
       default:
     }
+   if (snakePos.last==foodPos){
+    eatFood();
+   } 
+   else
+   {
+  //remove tail
+        snakePos.removeAt(0);
+   }
+}
+bool gameOver(){
+  List<int> bodySnake = snakePos.sublist(0,snakePos.length-1);
+  if (bodySnake.contains(snakePos.last)){
+    return true;
+  }
+  return false;
 }
 
   @override 
