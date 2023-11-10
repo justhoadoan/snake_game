@@ -58,10 +58,25 @@ void startGame(){
       child: GestureDetector(
         onVerticalDragUpdate:(details){
           if(details.delta.dy>0){
+            print('Move down');
+
+          }
+          else if(details.delta.dy<0){
             print('Move up');
 
           }
+          
 
+        },
+        onHorizontalDragUpdate: (details){
+          if(details.delta.dx>0){
+            print('Move left');
+
+          }
+          else if(details.delta.dx<0){
+            print('Move right');
+
+          }
         },
         child: GridView.builder(
           itemCount: totalNumberOfSquares,
