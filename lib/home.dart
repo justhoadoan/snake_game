@@ -11,6 +11,7 @@ import 'package:snakegame/food_pixel.dart';
   @override
   State<HomePage> createState() => _HomePageState();
  }
+ enum snake_Direction {UP, DOWN, LEFT, RIGHT}
  class _HomePageState extends State<HomePage>{
 //grid dimensions
 int rowSize = 10;
@@ -21,20 +22,61 @@ List<int> snakePos = [
 1,
 2,
 ];
+//SNAKE DIRECTION IS INITIALLY TO THE RIGHT
+var currentDirection= snake_Direction.RIGHT;
 // food position
 int foodPos = 55;
 //start the game
 void startGame(){
   Timer.periodic(Duration(milliseconds: 200), (timer){
     setState(() {
-      //add new head
-      snakePos.add(snakePos.last+1);
-      //remove tail
-      snakePos.removeAt(0);
+      moveSnake();
+    
       });
 
   });
   
+}
+void moveSnake(){
+    switch (currentDirection) {
+      case snake_Direction.RIGHT:{
+        //add a head
+        snakePos.add(snakePos.last+1);
+
+        //remove tail
+        snakePos.removeAt(0);
+      }
+        
+        break;
+        case snake_Direction.LEFT:{
+            //add a head
+        snakePos.add(snakePos.last-1);
+
+        //remove tail
+        snakePos.removeAt(0);
+        }
+        
+        break;
+        case snake_Direction.UP:{
+            //add a head
+        snakePos.add(snakePos.last - rowSize);
+
+        //remove tail
+        snakePos.removeAt(0);
+        }
+        
+        break;
+        case snake_Direction.DOWN:{
+            //add a head
+        snakePos.add(snakePos.last+rowSize);
+
+        //remove tail
+        snakePos.removeAt(0);
+        }
+        
+        break;
+      default:
+    }
 }
 
   @override 
@@ -57,24 +99,22 @@ void startGame(){
             flex: 3,
       child: GestureDetector(
         onVerticalDragUpdate:(details){
-          if(details.delta.dy>0){
-            print('Move down');
+          if(details.delta.dy>0 && currentDirection!= snake_Direction.UP){
+           currentDirection = snake_Direction.DOWN;
 
           }
-          else if(details.delta.dy<0){
-            print('Move up');
+          else if(details.delta.dy<0 && currentDirection!=snake_Direction.DOWN){
+            currentDirection = snake_Direction.UP;
 
           }
-          
-
-        },
+          },
         onHorizontalDragUpdate: (details){
-          if(details.delta.dx>0){
-            print('Move left');
+          if(details.delta.dx>0 && currentDirection!=snake_Direction.LEFT){
+            currentDirection = snake_Direction.RIGHT;
 
           }
-          else if(details.delta.dx<0){
-            print('Move right');
+          else if(details.delta.dx<0 && currentDirection!=snake_Direction.RIGHT){
+            currentDirection = snake_Direction.LEFT;
 
           }
         },
