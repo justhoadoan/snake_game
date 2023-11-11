@@ -107,7 +107,10 @@ void sumbitScore(){
 });
 
 }
-void newGame(){
+Future newGame() async {
+  highscore_DocIds = [];
+  await getDocId();
+
   setState(() {
      snakePos = [
 0,
@@ -216,19 +219,21 @@ bool gameOver(){
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children:[
             //user current score
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Current Score'),
-                Text(
-                  currentScore.toString(),
-                  style: TextStyle(fontSize: 36),
-                  ),
-              ],
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Current Score'),
+                  Text(
+                    currentScore.toString(),
+                    style: TextStyle(fontSize: 36),
+                    ),
+                ],
+              ),
             ),
             //high score
             Expanded(
-              child: FutureBuilder(
+              child: gameHasStarted ? Container () :  FutureBuilder(
                 future: letsGetDocIds,
                 builder:(context,snapshot) 
               {

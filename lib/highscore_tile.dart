@@ -22,6 +22,9 @@ class HighScoreTile extends StatelessWidget {
         return Row(
          children:[
            Text(data['Score'].toString()),
+           SizedBox(
+            width: 10 ,
+           ),
             Text(data['Name']),
             ],
           );
