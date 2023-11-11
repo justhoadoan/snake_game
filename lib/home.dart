@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:snakegame/blank_pixel.dart';
 import 'package:snakegame/snake_pixel.dart';
@@ -20,7 +21,8 @@ import 'package:snakegame/food_pixel.dart';
 //grid dimensions
 int rowSize = 10;
 int totalNumberOfSquares = 100;
-
+//game
+final _nameController = TextEditingController();
 bool gameHasStarted = false;
 //user score
 int currentScore = 0;
@@ -52,6 +54,7 @@ void startGame(){
                children: [
                  Text('Your score is '+ currentScore.toString()),
                  TextField(
+                  controller: _nameController ,
                   decoration: InputDecoration(hintText: 'Enter name'),
                  ),
                ],
@@ -79,8 +82,13 @@ void startGame(){
   
 }
 void sumbitScore(){
+  
+var database = FirebaseFirestore.instance;
+database.collection('Highscores').add({
+  "Name":_nameController.text,
+  "Score": currentScore,
+});
 
-//initState();
 }
 void newGame(){
   setState(() {
@@ -177,102 +185,106 @@ bool gameOver(){
 
   @override 
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Column(
-        children: [
-          //scores
-          Flexible(
-fit: FlexFit.tight,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children:[
-          //user current score
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Current Score'),
-              Text(
-                currentScore.toString(),
-                style: TextStyle(fontSize: 36),
-                ),
-            ],
-          ),
-          //high score
-          Text('Highscores..')
-        ],
-      ),
-            
-
-          ),
-          //game grid
-           Flexible(
-            fit: FlexFit.tight,
-            flex: 3,
-      child: GestureDetector(
-        onVerticalDragUpdate:(details){
-          if(details.delta.dy>0 && currentDirection!= snake_Direction.UP){
-           currentDirection = snake_Direction.DOWN;
-
-          }
-          else if(details.delta.dy<0 && currentDirection!=snake_Direction.DOWN){
-            currentDirection = snake_Direction.UP;
-
-          }
-          },
-        onHorizontalDragUpdate: (details){
-          if(details.delta.dx>0 && currentDirection!=snake_Direction.LEFT){
-            currentDirection = snake_Direction.RIGHT;
-
-          }
-          else if(details.delta.dx<0 && currentDirection!=snake_Direction.RIGHT){
-            currentDirection = snake_Direction.LEFT;
-
-          }
-        },
-        child: GridView.builder(
-          itemCount: totalNumberOfSquares,
-          physics: const  NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: rowSize ), 
-        itemBuilder: (context, index){
-          if (snakePos.contains(index)){
-            return const SnakePixel();
-                 }
-                 else if (foodPos==index)
-                 {
-                  return const FoodPixel();
-                 }
-      
-                 else
-                 {
-                  return const BlankPixel();
-                 }
-        }),
-      ),
-        ),
-                
-          
-          
-          
-          //play button
-           Flexible(
-
+      body: SizedBox(
+        width: screenWidth > 400 ? 400 : screenWidth  ,
+        child: Column(
+          children: [
+            //scores
+            Flexible(
       fit: FlexFit.tight,
-      child: Container(
-        child: Center(
-          child: MaterialButton(
-            child: Text('PLAY'),
-            color: gameHasStarted ? Colors.grey:  Colors.pink,
-            onPressed: gameHasStarted ? (){} : startGame ,
-
-            )
-            )
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children:[
+            //user current score
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Current Score'),
+                Text(
+                  currentScore.toString(),
+                  style: TextStyle(fontSize: 36),
+                  ),
+              ],
+            ),
+            //high score
+            Text('Highscores..')
+          ],
+        ),
+              
+      
+            ),
+            //game grid
+             Flexible(
+              fit: FlexFit.tight,
+              flex: 3,
+        child: GestureDetector(
+          onVerticalDragUpdate:(details){
+            if(details.delta.dy>0 && currentDirection!= snake_Direction.UP){
+             currentDirection = snake_Direction.DOWN;
+      
+            }
+            else if(details.delta.dy<0 && currentDirection!=snake_Direction.DOWN){
+              currentDirection = snake_Direction.UP;
+      
+            }
+            },
+          onHorizontalDragUpdate: (details){
+            if(details.delta.dx>0 && currentDirection!=snake_Direction.LEFT){
+              currentDirection = snake_Direction.RIGHT;
+      
+            }
+            else if(details.delta.dx<0 && currentDirection!=snake_Direction.RIGHT){
+              currentDirection = snake_Direction.LEFT;
+      
+            }
+          },
+          child: GridView.builder(
+            itemCount: totalNumberOfSquares,
+            physics: const  NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: rowSize ), 
+          itemBuilder: (context, index){
+            if (snakePos.contains(index)){
+              return const SnakePixel();
+                   }
+                   else if (foodPos==index)
+                   {
+                    return const FoodPixel();
+                   }
+        
+                   else
+                   {
+                    return const BlankPixel();
+                   }
+          }),
+        ),
+          ),
+                  
             
-),
-          ),
-        ]
-          ),
+            
+            
+            //play button
+             Flexible(
+      
+        fit: FlexFit.tight,
+        child: Container(
+          child: Center(
+            child: MaterialButton(
+              child: Text('PLAY'),
+              color: gameHasStarted ? Colors.grey:  Colors.pink,
+              onPressed: gameHasStarted ? (){} : startGame ,
+      
+              )
+              )
+              
+      ),
+            ),
+          ]
+            ),
+      ),
           );
   }
       
