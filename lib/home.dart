@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:snakegame/blank_pixel.dart';
+import 'package:snakegame/highscore_tile.dart';
 import 'package:snakegame/snake_pixel.dart';
 import 'package:snakegame/food_pixel.dart';
  
@@ -37,6 +38,7 @@ var currentDirection= snake_Direction.RIGHT;
 // food position
 int foodPos = 55;
 //scores list
+// ignore: non_constant_identifier_names
 List<String> highscore_DocIds = [];
 late final Future ? letsGetDocIds;
 @override
@@ -225,20 +227,23 @@ bool gameOver(){
               ],
             ),
             //high score
-            FutureBuilder(
-              future: letsGetDocIds,
-              builder:(context,snapshot) 
-            {
-              return ListView.builder(
-                itemCount: highscore_DocIds.length,
-                itemBuilder: ((context,index)
-                {
-                    return Text(highscore_DocIds[index]);
-                }
-                ),
-
-              );
-            }
+            Expanded(
+              child: FutureBuilder(
+                future: letsGetDocIds,
+                builder:(context,snapshot) 
+              {
+                return ListView.builder(
+                  itemCount: highscore_DocIds.length,
+                  itemBuilder: ((context,index)
+                  {
+                      return HighScoreTile(
+                        documentId: highscore_DocIds[index]);
+                  }
+                  ),
+            
+                );
+              }
+              ),
             )
           ],
         ),
