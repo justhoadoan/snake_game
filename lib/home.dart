@@ -81,12 +81,14 @@ void startGame(){
   });
   
 }
+
+
 void sumbitScore(){
-  
-var database = FirebaseFirestore.instance;
-database.collection('Highscores').add({
+  var database = FirebaseFirestore.instance;  
+  database.collection('Highscores').add({
   "Name":_nameController.text,
   "Score": currentScore,
+
 });
 
 }

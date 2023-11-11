@@ -6,13 +6,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: FirebaseOptions(apiKey: "AIzaSyBukwzXvYZK57F1KFnBC-P3CqRsry-vfRw",
-      authDomain: "snakegame-24477.firebaseapp.com",
-      projectId: "snakegame-24477",
-      storageBucket: "snakegame-24477.appspot.com",
-      messagingSenderId: "558887914113",
-      appId: "1:558887914113:web:2b66a682d5ee49439edb80",
-      measurementId: "G-6QYERMCM6V" )
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyBjp8H7C8GsuWQHWrqAVtDB2qiEXOZ5d6s",
+      authDomain: "snakegame-1542f.firebaseapp.com",
+      projectId: "snakegame-1542f",
+      storageBucket: "snakegame-1542f.appspot.com",
+      messagingSenderId: "118677879423",
+      appId: "1:118677879423:web:47a9136e70bf07e8c3dd4a",
+      measurementId: "G-XWKQR155NX" )
     
   );
 
