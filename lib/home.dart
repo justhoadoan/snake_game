@@ -36,6 +36,19 @@ List<int> snakePos = [
 var currentDirection= snake_Direction.RIGHT;
 // food position
 int foodPos = 55;
+//scores list
+List<String> highscore_DocIds = [];
+late final Future ? letsGetDocIds;
+@override
+void initState(){
+  letsGetDocIds = getDocId();
+  super.initState();
+}
+Future getDocId() async {
+  await FirebaseFirestore.instance.collection("Highscores").orderBy("Score",descending: true).limit(10).get().then(
+    (value) => value.docs.forEach((
+      element) {highscore_DocIds.add(element.reference.id);}));
+}
 //start the game
 void startGame(){
   gameHasStarted = true;
@@ -212,7 +225,21 @@ bool gameOver(){
               ],
             ),
             //high score
-            Text('Highscores..')
+            FutureBuilder(
+              future: letsGetDocIds,
+              builder:(context,snapshot) 
+            {
+              return ListView.builder(
+                itemCount: highscore_DocIds.length,
+                itemBuilder: ((context,index)
+                {
+                    return Text(highscore_DocIds[index]);
+                }
+                ),
+
+              );
+            }
+            )
           ],
         ),
               
@@ -266,7 +293,7 @@ bool gameOver(){
           ),
                   
             
-            
+            //
             
             //play button
              Flexible(
